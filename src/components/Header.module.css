@@ -1,0 +1,13 @@
+.container {
+    text-align: center;
+}
+.toolbar1{
+    display:flex;
+    align-items: center;
+    justify-content:center;
+    margin: 12px 0 24px 0;
+}
+
+.toolbar1>button {
+    margin: 8px;
+}

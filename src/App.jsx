@@ -1,10 +1,15 @@
 import React from "react";
 import "./styles.css";
+import Header from "./components/Header";
+import EpisodesList from "./components/EpisodesList";
 
 const App = () => {
+
     return (
-        <div>
-            <h1>Clean Project</h1>
+        <div className="appContainer">
+
+            <Header/>
+            <EpisodesList/>
         </div>
     );
 };
