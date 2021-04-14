@@ -11,6 +11,12 @@ export const appAPI = {
     getEpisodes (page) {
         return instance.get(`episode?page=${page}`);
     },
+    getSeason (episodes) {
+        return instance.get(`episode/${episodes}`);
+    },
+    searchEpisode (name) {
+        return instance.get(`episode/?name=${name}`)
+    },
     getCharacter (){
         return instance.get(`character`);
     },

@@ -2,19 +2,19 @@ import {useEffect, useRef, useState} from "react";
 
 export default function useScroll(parentRef, childRef, callback) {
     const observer = useRef();
-    const [fetch,setFetch] = useState(true)
+    // const [fetch,setFetch] = useState(true)
 
     useEffect(() => {
         const options = {
             root: parentRef.current,
             rootMargin: '0px',
-            threshold: 1
+            threshold: 0
         }
         observer.current = new IntersectionObserver(([target]) => {
             if (target.isIntersecting) {
                 console.log('intersected')
                 callback()
-                setFetch(false)
+                // setFetch(false)
             }
         }, options)
 
@@ -23,5 +23,5 @@ export default function useScroll(parentRef, childRef, callback) {
         return function () {
             observer.current.unobserve(childRef.current)
         };
-    }, [fetch,callback])
+    }, [callback])
 };

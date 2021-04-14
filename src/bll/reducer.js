@@ -5,7 +5,7 @@ const SET_CHARACTER = 'SET_CHARACTER';
 const SET_INIT = 'SET_INIT';
 
 let initialState = {
-    episodes: {},
+    episodes: [],
     characters: {},
     initApp: false
 }
@@ -15,7 +15,7 @@ export const reducer = (state = initialState, action) => {
         case SET_EPISODE:
             return {
                 ...state,
-                episodes: action.payload
+                episodes: [...action.episodes]
             }
         case SET_CHARACTER:
             return {
@@ -38,17 +38,15 @@ export const setInitApp = (init) => ({type: SET_INIT, init})
 
 export const fetchData = (page) => {
     return async (dispatch) => {
-        const responseCharacters = await appAPI.getCharacter()
-        const characters = responseCharacters.data.reduce((acc, character) => {
-            acc[character.id] = character
-            return acc
-        }, {})
-        dispatch(setCharacterAC(characters))
+
         const responseEpisodes = await appAPI.getEpisodes(page)
-        const episodes = responseEpisodes.data.reduce((acc, episode) => {
-            acc[episode.id] = episode
-            return acc
-        }, {})
+        debugger
+        const episodes = responseEpisodes
+        console.log(responseEpisodes)
+        // const episodes = responseEpisodes.data.results.reduce((acc, episode) => {
+        //     acc[episode.id] = episode
+        //     return acc
+        // }, {})
         dispatch(setEpisodeAC(episodes))
         dispatch(setInitApp(true))
     }
