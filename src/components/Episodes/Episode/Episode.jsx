@@ -4,7 +4,6 @@ import img from '../../../assets/episode.png'
 
 
 const Episode = (props) => {
-    // console.log(props.characters)
 
     const cards = {backgroundImage: `url(${img})`}
 
@@ -19,12 +18,9 @@ const Episode = (props) => {
                             <div>{props.episode}</div>
                             <div>{props.airDate}</div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 };

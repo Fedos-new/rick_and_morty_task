@@ -15,23 +15,29 @@ const seasons = {
 }
 
 export const appAPI = {
-    getEpisodes (page) {
+    getEpisodes(page) {
         return instance.get(`episode?page=${page}`);
     },
-    getSeason (season) {
-                if(season === 's1')  return instance.get(`episode/${seasons.s1}`);
-                if(season === 's2')  return instance.get(`episode/${seasons.s2}`);
-                if(season === 's3')  return instance.get(`episode/${seasons.s3}`);
-                if(season === 's4')  return instance.get(`episode/${seasons.s4}`);
+    getSeason(season) {
+        if (season === 's1') return instance.get(`episode/${seasons.s1}`);
+        if (season === 's2') return instance.get(`episode/${seasons.s2}`);
+        if (season === 's3') return instance.get(`episode/${seasons.s3}`);
+        if (season === 's4') return instance.get(`episode/${seasons.s4}`);
     },
-    searchEpisode (name) {
+    searchEpisode(name) {
         return instance.get(`episode/?name=${name}`)
     },
-    getCharacter (){
-        return instance.get(`character`);
+    getEpisodePage(id) {
+        return instance.get(`episode/${id}`);
     },
-    getLocation () {
-        return instance.get(`location`);
+    getCharacters(pages) {
+        return instance.get(`character/${pages}`);
+    },
+    getCharacterPage(id) {
+        return instance.get(`character/${id}`);
+    },
+    getLocationPage(id) {
+        return instance.get(`location/${id}`);
     },
 }
 

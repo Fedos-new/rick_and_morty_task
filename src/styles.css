@@ -3,7 +3,9 @@ body {
     padding: 0;
     background-color: #1C0026;
 }
-
+a {
+    color: #F5F5F5;
+}
 .appContainer {
     width: 90%;
     margin: 0 auto;

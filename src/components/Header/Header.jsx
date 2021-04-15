@@ -26,13 +26,11 @@ const Header = (props) => {
         }
     }
 
-
     const onChangeHandler = e => {
         setInputValue(e.target.value)
     }
 
 
-    const logoG = {backgroundImage: `url(${logo})`}
 
     return (
         <div className={style.container}>

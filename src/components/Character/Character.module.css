@@ -1,0 +1,38 @@
+.wrapCharacter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.wrapEpisodePage {
+    text-align: center;
+}
+
+.character {
+    width: 600px;
+    height: 220px;
+    display: flex;
+    overflow: hidden;
+    background: #262C3A;
+    border-radius: 0.5rem;
+    margin: 0.75rem;
+}
+
+.character:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 19px -3px rgb(71 211 229);
+    transition: all 300ms ease;
+    cursor: pointer;
+}
+
+.descriptionCharacter {
+    padding: 16px;
+    text-align: initial;
+}
+
+.link {
+    text-decoration: none;
+    color: #9cd2bc;
+}
+.link:hover{
+    color: #00a3bf;
+}
