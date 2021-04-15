@@ -2,9 +2,10 @@ import React from 'react'
 import {Redirect, Route, Switch} from "react-router-dom";
 import EpisodesListAll from "./components/Episodes/EpisodesListAll";
 import SelectedEpisodesList from './components/Episodes/SelectedEpisodesList'
-import EpisodePage from "./components/EpisodePage/EpisodePage";
-import CharacterPage from "./components/CharacterPage/CharacterPage";
-import LocationPage from "./components/LocationPage/LocationPage";
+import EpisodePage from "./components/Pages/EpisodePage/EpisodePage";
+import CharacterPage from "./components/Pages/CharacterPage/CharacterPage";
+import LocationPage from "./components/Pages/LocationPage/LocationPage";
+import {useSelector} from "react-redux";
 
 export const PATH = {
     ALL_EPISODES: "/all_episodes",
@@ -15,7 +16,6 @@ export const PATH = {
 }
 
 export const Routes = () => {
-
     return (
         <div>
             <Switch>

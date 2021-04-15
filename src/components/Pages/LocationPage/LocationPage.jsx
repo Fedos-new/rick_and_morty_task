@@ -1,27 +1,26 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCharactersTC, fetchEpisodePageTC} from "../../bll/reducer";
+import {fetchCharactersTC, fetchLocationPageTC} from "../../../bll/reducer";
 import {NavLink, useParams} from "react-router-dom";
-import Character from "../Character/Character";
-import style from "../Character/Character.module.css"
+import Character from "../../Character/Character";
+import style from "../../Character/Character.module.css"
 
 
-const EpisodePage = () => {
-    const episodePage = useSelector(state => state.episodesData.episodePage)
+const LocationPage = () => {
+    const locationPage = useSelector(state => state.episodesData.locationPage)
     const characters = useSelector(state => state.episodesData.characters)
     const dispatch = useDispatch()
     let {id} = useParams();
     let pages = []
 
-    if (episodePage.characters) episodePage.characters.map(ch => {
+    if (locationPage.residents) locationPage.residents.map(ch => {
         let arrId = ch.match(/\d+/)
         pages.push(arrId[0])
     })
 
     useEffect(() => {
-        dispatch(fetchEpisodePageTC(id))
+        dispatch(fetchLocationPageTC(id))
     }, [id])
-
 
     useEffect(() => {
         dispatch(fetchCharactersTC(pages))
@@ -30,11 +29,11 @@ const EpisodePage = () => {
 
     return (
         <div className={style.wrapEpisodePage}>
-            <h2>Episode Name: {episodePage.name}</h2>
-            <h3>{episodePage.episode}</h3>
-            <h3>{episodePage.air_date}</h3>
+            <h2>Location Name: {locationPage.name}</h2>
+            <h3>Type:{locationPage.type}</h3>
+            <h3>Dimension:{locationPage.dimension}</h3>
             <div>
-                <h3>Characters in this episode:</h3>
+                <h3>Residents in this location:</h3>
                 <div className={style.wrapCharacter}>
                     {
                         characters
@@ -59,4 +58,4 @@ const EpisodePage = () => {
         </div>
     )
 }
-export default EpisodePage
+export default LocationPage

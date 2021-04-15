@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchCharacterPageTC} from "../../bll/reducer";
+import {fetchCharacterPageTC} from "../../../bll/reducer";
 import {NavLink, useParams} from "react-router-dom";
-import style from '../Character/Character.module.css'
+import style from '../../Character/Character.module.css'
 
 
 const CharacterPage = () => {
@@ -13,7 +13,6 @@ const CharacterPage = () => {
     let page = location?.url.match(/\d+/)[0]
 
 
-    console.log(page)
     useEffect(() => {
         dispatch(fetchCharacterPageTC(id))
     }, [id])

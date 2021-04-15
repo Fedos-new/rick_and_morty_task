@@ -5,8 +5,9 @@ import {fetchSeasonTC, searchEpisodeTC} from "../../bll/reducer";
 import {NavLink, useHistory} from "react-router-dom";
 import {PATH} from "../../Routes";
 import logo from "../../assets/logo0.png";
+import SuperButton from "../common/Button/SuperButton";
 
-const Header = (props) => {
+const Header = () => {
     const [inputValue, setInputValue] = useState("");
     let history = useHistory()
 
@@ -31,7 +32,6 @@ const Header = (props) => {
     }
 
 
-
     return (
         <div className={style.container}>
             <img
@@ -40,27 +40,31 @@ const Header = (props) => {
                 width="90%"
                 className={style.logo}
                 alt=""
-                />
-            {/*<h1>Rick and Morty</h1>*/}
+            />
             <div className={style.toolbar1}>
-                <NavLink  to={PATH.SEASON_PAGE}><button onClick={()=>getSeason('s1')}>1 Season</button></NavLink>
-                <NavLink  to={PATH.SEASON_PAGE}><button onClick={()=>getSeason('s2')}>2 Season</button></NavLink>
-                <NavLink  to={PATH.SEASON_PAGE}><button onClick={()=>getSeason('s3')}>3 Season</button></NavLink>
-                <NavLink  to={PATH.SEASON_PAGE}><button onClick={()=>getSeason('s4')}>4 Season</button></NavLink>
-                <NavLink to={PATH.ALL_EPISODES}><button>All Episodes</button></NavLink>
+                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s1')}>1
+                    Season</SuperButton></NavLink>
+                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s2')}>2
+                    Season</SuperButton></NavLink>
+                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s3')}>3
+                    Season</SuperButton></NavLink>
+                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s4')}>4
+                    Season</SuperButton></NavLink>
+                <NavLink to={PATH.ALL_EPISODES}><SuperButton onClick={() => getSeason('s4')}>All Episodes</SuperButton></NavLink>
             </div>
             <div className={style.toolbar1}>
 
                 <input
                     type="text"
+                    autoComplete="off"
                     name="search"
-                    id="search"
+                    className={style.superInput}
                     onKeyPress={onKeyPressHandler}
                     value={inputValue}
                     placeholder="Search by episode name"
                     onChange={onChangeHandler}
                 />
-                <NavLink to={PATH.SEASON_PAGE}><button onClick={searchEp}>Search</button></NavLink>
+                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={searchEp}>Search</SuperButton></NavLink>
             </div>
 
         </div>

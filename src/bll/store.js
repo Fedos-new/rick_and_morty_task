@@ -7,6 +7,6 @@ const reducers = combineReducers({
     episodesData: reducer
 })
 
-const store = createStore(reducers,composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));
 
 export {store};
