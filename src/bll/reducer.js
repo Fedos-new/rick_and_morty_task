@@ -125,7 +125,6 @@ export const fetchEpisodeTC = (pages) => {
         }
         catch (e) {
             dispatch(setLoadingAC(false))
-            dispatch(setErrorApp(e.message))
         }
     }
 }
