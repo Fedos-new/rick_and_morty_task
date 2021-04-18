@@ -3,9 +3,12 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+
 .wrapEpisodePage {
     text-align: center;
 }
+
+
 
 .character {
     width: 600px;
@@ -24,15 +27,33 @@
     cursor: pointer;
 }
 
+.CharacterInfo{
+    display: inline-block;
+    text-align: start;
+    vertical-align: top;
+    margin: 16px 16px;
+}
+
 .descriptionCharacter {
-    padding: 16px;
     text-align: initial;
+    font-size: 1.1em;
+}
+
+.descriptionCharacter > li {
+    padding: 2px 0;
 }
 
 .link {
     text-decoration: none;
     color: #9cd2bc;
 }
-.link:hover{
+
+.link:hover {
     color: #00a3bf;
+}
+.error {
+    text-align: center;
+    padding: 30px;
+    color: #fc6e6e;
+    font-size: 18px;
 }

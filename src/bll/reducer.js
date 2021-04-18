@@ -1,20 +1,20 @@
 import {appAPI} from "../dal/api";
 import {sortFromBeginning, sortFromEnd} from "../utils/sortBy";
 
-const SET_EPISODE = 'SET_EPISODE';
-const SET_SORT_EPISODE_UP = 'SET_SORT_EPISODE_UP';
-const SET_SORT_EPISODE_DOWN = 'SET_SORT_EPISODE_DOWN';
-const SET_SEASON = 'SET_SEASON';
-const SEARCH_EPISODE = 'SEARCH_EPISODE';
-const SET_EPISODE_PAGE = 'SET_EPISODE_PAGE';
+const SET_EPISODE = 'episodes/SET_EPISODE';
+const SET_LOADING = 'episodes/SET_LOADING';
 
-const SET_CHARACTERS = 'SET_CHARACTERS';
-const SET_CHARACTER_PAGE = 'SET_CHARACTER_PAGE';
+const SET_SORT_EPISODE_UP = 'selectEpisode/SET_SORT_EPISODE_UP';
+const SET_SORT_EPISODE_DOWN = 'selectEpisode/SET_SORT_EPISODE_DOWN';
+const SET_SEASON = 'selectEpisode/SET_SEASON';
+const SEARCH_EPISODE = 'selectEpisode/SEARCH_EPISODE';
 
-const SET_LOCATION_PAGE = 'SET_LOCATION_PAGE';
+const SET_EPISODE_PAGE = 'page/SET_EPISODE_PAGE';
+const SET_CHARACTER_PAGE = 'page/SET_CHARACTER_PAGE';
+const SET_LOCATION_PAGE = 'page/SET_LOCATION_PAGE';
 
-const SET_ERROR = 'SET_ERROR';
-const SET_INIT = 'SET_INIT';
+const SET_STATUS = 'app/SET_STATUS'
+const SET_ERROR = 'app/SET_ERROR';
 
 let initialState = {
     episodes: [],
@@ -24,8 +24,9 @@ let initialState = {
     characterPage: {},
     locationPage: {},
     characters: [],
-    error: false,
-    initApp: false
+    status: 'idle',
+    loading: false,
+    error: null,
 }
 
 export const reducer = (state = initialState, action) => {
@@ -53,37 +54,39 @@ export const reducer = (state = initialState, action) => {
         case SET_SEASON:
             return {
                 ...state,
-                searchEpisode: action.episodes
+                searchEpisode: [...action.episodes]
             }
         case SET_EPISODE_PAGE:
             return {
                 ...state,
-                episodePage: action.episodesPage
-            }
-        case SET_CHARACTER_PAGE:
-            return {
-                ...state,
-                characterPage: action.characterPage
-            }
-        case SET_CHARACTERS:
-            return {
-                ...state,
-                characters: [...action.characters]
+                episodePage: action.payload.episodePageInfo,
+                characters: action.payload.charactersArray
             }
         case SET_LOCATION_PAGE:
             return {
                 ...state,
-                locationPage: action.locationPage
+                locationPage: action.payload.locationPageInfo,
+                characters: action.payload.charactersArray
             }
+        case SET_CHARACTER_PAGE:
+            return {
+                ...state,
+                episodes: action.payload.episodesArray,
+                characterPage: action.payload.characterPageInfo
+            }
+        case SET_LOADING:
+            return {
+                ...state,
+                loading: action.loading,
+
+            }
+        case SET_STATUS:
+            return {...state, status: action.status}
+
         case SET_ERROR:
             return {
                 ...state,
-                error: action.payload
-            }
-        case SET_INIT:
-            return {
-                ...state,
-                initApp: action.payload
+                error: action.error
             }
         default:
             return state;
@@ -92,93 +95,133 @@ export const reducer = (state = initialState, action) => {
 //Action Creates for Episodes
 export const setEpisodeAC = (episodes) => ({type: SET_EPISODE, episodes})
 export const setSeasonAC = (episodes) => ({type: SET_SEASON, episodes})
+
 //Action Creates for Sort and search Episodes
 export const setSortUpAC = (episodesSort) => ({type: SET_SORT_EPISODE_UP, episodesSort})
 export const setSortDownAC = (episodesSort) => ({type: SET_SORT_EPISODE_DOWN, episodesSort})
 export const searchEpisodeAC = (episodes) => ({type: SEARCH_EPISODE, episodes})
 
 //Action Creates for Page
-export const setEpisodePageAC = (episodesPage) => ({type: SET_EPISODE_PAGE, episodesPage})
-export const setCharacterPageAC = (characterPage) => ({type: SET_CHARACTER_PAGE, characterPage})
-export const setLocationPageAC = (locationPage) => ({type: SET_LOCATION_PAGE, locationPage})
+export const setEpisodePageAC = (payload) => ({type: SET_EPISODE_PAGE, payload})
+export const setCharacterPageAC = (payload) => ({type: SET_CHARACTER_PAGE, payload})
+export const setLocationPageAC = (payload) => ({type: SET_LOCATION_PAGE, payload})
 
-//Action Create for Characters
-export const setCharactersAC = (characters) => ({type: SET_CHARACTERS, characters})
-
-export const setInitApp = (init) => ({type: SET_INIT, init})
+//Common Action Creates
+export const setLoadingAC = (loading) => ({type: SET_LOADING, loading})
+export const setAppStatusAC = (status) => ({type: SET_STATUS, status})
 export const setErrorApp = (error) => ({type: SET_ERROR, error})
 
 
-//thunks
-
+///thunks
 //Episodes
-export const fetchEpisodeTC = (pages) => (dispatch) => {
-    appAPI.getEpisodes(pages)
-        .then(res => dispatch(setEpisodeAC(res.data.results)))
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
+export const fetchEpisodeTC = (pages) => {
+    return async (dispatch) => {
+        try {
+            dispatch(setLoadingAC(true))
+            const response = await appAPI.getEpisodes(pages)
+            const episodes = response.data.results
+            dispatch(setEpisodeAC(episodes))
+            dispatch(setLoadingAC(false))
+        }
+        catch (e) {
+            dispatch(setLoadingAC(false))
+            dispatch(setErrorApp(e.message))
+        }
+    }
 }
 
-export const searchEpisodeTC = (name) => (dispatch) => {
-    appAPI.searchEpisode(name)
-        .then(res => dispatch(searchEpisodeAC(res.data.results))
-        )
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
+export const searchEpisodeTC = (name) => {
+    return async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            const response = await appAPI.searchEpisode(name)
+            dispatch(searchEpisodeAC(response.data.results))
+            dispatch(setAppStatusAC('succeeded'))
+        } catch (e) {
+            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setErrorApp(e.message))
+        }
+
+    }
 }
 
-export const fetchSeasonTC = (season) => (dispatch) => {
-    appAPI.getSeason(season)
-        .then(res => dispatch(setSeasonAC(res.data)))
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
+export const fetchSeasonTC = (season) => {
+    return async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            const responseSeason = await appAPI.getSeason(season)
+            const seasonData = responseSeason.data
+            dispatch(setSeasonAC(seasonData))
+            dispatch(setAppStatusAC('succeeded'))
+        } catch (e) {
+            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setErrorApp(e.message))
+        }
+    }
 }
 
-export const fetchEpisodePageTC = (id) => (dispatch) => {
-    appAPI.getEpisodePage(id)
-        .then(res => dispatch(setEpisodePageAC(res.data)))
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
+//Page Episode
+export const fetchEpisodePageTC = (id) => {
+    return async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            const responseEpisode = await appAPI.getEpisodePage(id)
+            const characters = responseEpisode.data.characters
+
+            const responseCharacters = await appAPI.getCharactersOnUrl(characters)
+            const charactersArray = responseCharacters.map(res => res.data)
+            const episodePageInfo = responseEpisode.data
+            dispatch(setEpisodePageAC({
+                episodePageInfo, charactersArray
+            }))
+            dispatch(setAppStatusAC('succeeded'))
+        } catch (e) {
+            dispatch(setErrorApp(e.message))
+            dispatch(setAppStatusAC('succeeded'))
+        }
+    }
 }
 
+//Page Location
+export const fetchLocationPageTC = (id) => {
+    return async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            const responseLocation = await appAPI.getLocationPage(id)
+            const characters = responseLocation.data.residents
 
-//Characters
-export const fetchCharactersTC = (url) => (dispatch) => {
-
-    appAPI.getCharacters(url)
-        .then(res => {
-            dispatch(setCharactersAC(res.data))
-        })
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
-}
-export const fetchCharacterPageTC = (id) => (dispatch) => {
-    appAPI.getCharacterPage(id)
-        .then(res => dispatch(setCharacterPageAC(res.data)))
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
+            const responseCharacters = await appAPI.getCharactersOnUrl(characters)
+            const charactersArray = responseCharacters.map(res => res.data)
+            const locationPageInfo = responseLocation.data
+            dispatch(setLocationPageAC({
+                locationPageInfo, charactersArray
+            }))
+            dispatch(setAppStatusAC('succeeded'))
+        } catch (e) {
+            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setErrorApp(e.message))
+        }
+    }
 }
 
-//Location
-export const fetchLocationPageTC = (id) => (dispatch) => {
-    appAPI.getLocationPage(id)
-        .then(res => {
-            dispatch(setLocationPageAC(res.data))
-        })
-        .catch(rej => {
-            dispatch(setErrorApp(false))
-            console.log(rej)
-        })
+//Page Character
+export const fetchCharacterPageTC = (id) => {
+    return async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        try {
+            const responseCharacter = await appAPI.getCharacterPage(id)
+            const characterPageInfo = responseCharacter.data
+
+            const responseEpisodes = await appAPI.getEpisodesOnUrl(characterPageInfo.episode)
+            const episodesArray = responseEpisodes.map(res => res.data)
+            dispatch(setCharacterPageAC({
+                characterPageInfo, episodesArray
+            }))
+            dispatch(setAppStatusAC('succeeded'))
+        } catch (e) {
+            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setErrorApp(e.message))
+        }
+    }
 }
+

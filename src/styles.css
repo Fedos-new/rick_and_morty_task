@@ -3,11 +3,23 @@ body {
     padding: 0;
     background-color: #1C0026;
 }
+
 a {
     color: #F5F5F5;
+    text-decoration: none;
 }
+li {
+    list-style-type: none;
+}
+
 .appContainer {
     width: 90%;
     margin: 0 auto;
     color: #F5F5F5;
+}
+.error {
+    text-align: center;
+    padding: 30px;
+    color: #fc6e6e;
+    font-size: 18px;
 }

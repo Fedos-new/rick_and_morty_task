@@ -25,11 +25,13 @@
 .red:hover {
     color: #d03535;
     background-color: transparent;
+    cursor: pointer;
 }
 
 .default:hover {
     color: #00A3BF;
     background-color: transparent;
+    cursor: pointer;
 }
 
 

@@ -20,6 +20,7 @@ const Header = () => {
         dispatch(fetchSeasonTC(season))
     }
 
+
     const onKeyPressHandler = (e) => {
         if (e.charCode === 13) {
             history.push(PATH.SEASON_PAGE)
@@ -39,18 +40,24 @@ const Header = () => {
                 height="90%"
                 width="90%"
                 className={style.logo}
-                alt=""
+                alt="logo"
             />
             <div className={style.toolbar1}>
-                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s1')}>1
-                    Season</SuperButton></NavLink>
-                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s2')}>2
-                    Season</SuperButton></NavLink>
-                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s3')}>3
-                    Season</SuperButton></NavLink>
-                <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={() => getSeason('s4')}>4
-                    Season</SuperButton></NavLink>
-                <NavLink to={PATH.ALL_EPISODES}><SuperButton onClick={() => getSeason('s4')}>All Episodes</SuperButton></NavLink>
+                <NavLink to={PATH.SEASON_PAGE + 1}>
+                    <SuperButton onClick={() => getSeason('s1')}>1 Season</SuperButton>
+                </NavLink>
+                <NavLink to={PATH.SEASON_PAGE + 2}>
+                    <SuperButton onClick={() => getSeason('s2')}>2 Season</SuperButton>
+                </NavLink>
+                <NavLink to={PATH.SEASON_PAGE + 3}>
+                    <SuperButton onClick={() => getSeason('s3')}>3 Season</SuperButton>
+                </NavLink>
+                <NavLink to={PATH.SEASON_PAGE + 4}>
+                    <SuperButton onClick={() => getSeason('s4')}>4 Season</SuperButton>
+                </NavLink>
+                <NavLink to={PATH.ALL_EPISODES}>
+                    <SuperButton>All Episodes</SuperButton>
+                </NavLink>
             </div>
             <div className={style.toolbar1}>
 

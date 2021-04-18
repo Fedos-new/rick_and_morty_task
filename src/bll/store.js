@@ -4,7 +4,7 @@ import thunk from "redux-thunk";
 import {reducer} from "./reducer";
 
 const reducers = combineReducers({
-    episodesData: reducer
+    serialData: reducer
 })
 
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));

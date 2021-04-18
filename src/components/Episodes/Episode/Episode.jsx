@@ -9,7 +9,6 @@ const Episode = (props) => {
 
     return (
         <div className={style.episode}>
-            {/*<img src={img} alt="Episode" className={`${style.img} ${cards}`} />*/}
             <div className={style.img} style={cards}>
                 <div className={style.descriptionBlock}>
                     <div className={style.descriptionText}>

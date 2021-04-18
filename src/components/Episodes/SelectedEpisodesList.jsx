@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import style from './Episode/Episode.module.css'
 import Episode from "./Episode/Episode";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchSeasonTC, setSortDownAC, setSortUpAC} from "../../bll/reducer";
+import {setSortDownAC, setSortUpAC} from "../../bll/reducer";
 import {NavLink} from "react-router-dom";
 import SuperButton from "../common/Button/SuperButton";
 
 const SelectedEpisodesList = () => {
-    const searchEpisode = useSelector(state => state.episodesData.searchEpisode)
-    const error = useSelector(state => state.episodesData.error)
+    const searchEpisode = useSelector(state => state.serialData.searchEpisode)
+    const error = useSelector(state => state.serialData.error)
     const dispatch = useDispatch()
     const [sortToggle, setSortToggle] = useState(false)
 
     let copyEpisodes = [...searchEpisode]
 
-    useEffect(() => {
-        dispatch(fetchSeasonTC('s1'))
-    }, [])
+
+    // useEffect(() => {
+    //     dispatch(fetchSeasonTC('s1'))
+    // }, [])
 
 
     const sortEpisodes = () => {
@@ -31,8 +32,8 @@ const SelectedEpisodesList = () => {
 
     return (
         <div>
-            <div className={style.sortBtn} >
-            <SuperButton onClick={sortEpisodes}>Sort by Name</SuperButton>
+            <div className={style.sortBtn}>
+                <SuperButton onClick={sortEpisodes}>Sort by Name</SuperButton>
             </div>
             <div className={style.episodesBlock}>
                 {

@@ -7,16 +7,16 @@ const Character = (props) => {
 
     return (
         <div className={style.character}>
-            <img src={ava} alt="character" className={style.ava}/>
-            <div className={style.descriptionCharacter}>
-                    <div>name:{name}</div>
-                    <div>gender:{gender}</div>
-                    <div>status:{status}</div>
-                    <div>species:{species}</div>
-                    <div>{{type}?`type:${type}`:''}</div>
-                    <div>characters:{characters}</div>
-                    <div>location name:{location.name}</div>
-            </div>
+            <img src={ava} alt="character" />
+            <ul className={style.descriptionCharacter}>
+                    <li>name: {name}</li>
+                    <li>gender: {gender}</li>
+                    <li>status: {status}</li>
+                    <li>species: {species}</li>
+                    <li>{{type}?`type:${type}`:''}</li>
+                    <li>characters: {characters}</li>
+                    <li>location name: {location.name ? location.name : ''}</li>
+            </ul>
         </div>
     );
 };
