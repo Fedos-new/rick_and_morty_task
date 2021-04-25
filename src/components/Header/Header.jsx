@@ -4,13 +4,12 @@ import {useDispatch} from "react-redux";
 import {fetchSeasonTC, searchEpisodeTC} from "../../bll/reducer";
 import {NavLink, useHistory} from "react-router-dom";
 import {PATH} from "../../Routes";
-import logo from "../../assets/logo0.png";
+import logo from "../../assets/logo_title.png";
 import SuperButton from "../common/Button/SuperButton";
 
-const Header = () => {
+const Header = React.memo(() => {
     const [inputValue, setInputValue] = useState("");
     let history = useHistory()
-
     const dispatch = useDispatch()
     const searchEp = () => {
         dispatch(searchEpisodeTC(inputValue))
@@ -19,7 +18,6 @@ const Header = () => {
     const getSeason = (season) => {
         dispatch(fetchSeasonTC(season))
     }
-
 
     const onKeyPressHandler = (e) => {
         if (e.charCode === 13) {
@@ -32,7 +30,6 @@ const Header = () => {
         setInputValue(e.target.value)
     }
 
-
     return (
         <div className={style.container}>
             <img
@@ -43,7 +40,7 @@ const Header = () => {
                 alt="logo"
             />
             <div className={style.toolbar1}>
-                <NavLink to={PATH.SEASON_PAGE + 1}>
+                <NavLink to={PATH.SEASON_PAGE + '1'} >
                     <SuperButton onClick={() => getSeason('s1')}>1 Season</SuperButton>
                 </NavLink>
                 <NavLink to={PATH.SEASON_PAGE + 2}>
@@ -60,7 +57,6 @@ const Header = () => {
                 </NavLink>
             </div>
             <div className={style.toolbar1}>
-
                 <input
                     type="text"
                     autoComplete="off"
@@ -73,9 +69,8 @@ const Header = () => {
                 />
                 <NavLink to={PATH.SEASON_PAGE}><SuperButton onClick={searchEp}>Search</SuperButton></NavLink>
             </div>
-
         </div>
     );
-};
+})
 
 export default Header;

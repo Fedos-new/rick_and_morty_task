@@ -17,13 +17,14 @@ const SET_STATUS = 'app/SET_STATUS'
 const SET_ERROR = 'app/SET_ERROR';
 
 let initialState = {
-    episodes: [],
+    episodes: {},
     season: [],
     searchEpisode: [],
+    selectedEpisode: [],
+    characters: [],
     episodePage: {},
     characterPage: {},
     locationPage: {},
-    characters: [],
     status: 'idle',
     loading: false,
     error: null,
@@ -34,27 +35,29 @@ export const reducer = (state = initialState, action) => {
         case SET_EPISODE:
             return {
                 ...state,
-                episodes: [...state.episodes, ...action.episodes]
+                episodes: Object.assign({}, state.episodes, action.episodes)
             }
         case SEARCH_EPISODE:
             return {
                 ...state,
-                searchEpisode: action.episodes
+                searchEpisode: action.episodes,
+                selectedEpisode: []
             }
         case SET_SORT_EPISODE_UP:
             return {
                 ...state,
-                searchEpisode: sortFromBeginning(action.episodesSort, "name")
+                selectedEpisode: sortFromBeginning(action.episodesSort, "name")
             }
         case SET_SORT_EPISODE_DOWN:
             return {
                 ...state,
-                searchEpisode: sortFromEnd(action.episodesSort, "name")
+                selectedEpisode: sortFromEnd(action.episodesSort, "name")
             }
         case SET_SEASON:
             return {
                 ...state,
-                searchEpisode: [...action.episodes]
+                selectedEpisode: [...action.episodes],
+                searchEpisode: []
             }
         case SET_EPISODE_PAGE:
             return {
@@ -71,14 +74,13 @@ export const reducer = (state = initialState, action) => {
         case SET_CHARACTER_PAGE:
             return {
                 ...state,
-                episodes: action.payload.episodesArray,
+                selectedEpisode: action.payload.episodesArray,
                 characterPage: action.payload.characterPageInfo
             }
         case SET_LOADING:
             return {
                 ...state,
                 loading: action.loading,
-
             }
         case SET_STATUS:
             return {...state, status: action.status}
@@ -114,16 +116,20 @@ export const setErrorApp = (error) => ({type: SET_ERROR, error})
 
 ///thunks
 //Episodes
+
 export const fetchEpisodeTC = (pages) => {
     return async (dispatch) => {
         try {
             dispatch(setLoadingAC(true))
             const response = await appAPI.getEpisodes(pages)
-            const episodes = response.data.results
+
+            const episodes = response.data.results.reduce((acc, ep) => {
+                acc[ep.id] = ep
+                return acc
+            }, {})
             dispatch(setEpisodeAC(episodes))
             dispatch(setLoadingAC(false))
-        }
-        catch (e) {
+        } catch (e) {
             dispatch(setLoadingAC(false))
         }
     }
@@ -137,24 +143,21 @@ export const searchEpisodeTC = (name) => {
             dispatch(searchEpisodeAC(response.data.results))
             dispatch(setAppStatusAC('succeeded'))
         } catch (e) {
+            dispatch(searchEpisodeAC([]))
             dispatch(setAppStatusAC('succeeded'))
-            dispatch(setErrorApp(e.message))
         }
-
     }
 }
 
 export const fetchSeasonTC = (season) => {
     return async (dispatch) => {
-        dispatch(setAppStatusAC('loading'))
         try {
             const responseSeason = await appAPI.getSeason(season)
             const seasonData = responseSeason.data
             dispatch(setSeasonAC(seasonData))
-            dispatch(setAppStatusAC('succeeded'))
         } catch (e) {
-            dispatch(setAppStatusAC('succeeded'))
             dispatch(setErrorApp(e.message))
+            console.log(e.message)
         }
     }
 }
@@ -177,6 +180,7 @@ export const fetchEpisodePageTC = (id) => {
         } catch (e) {
             dispatch(setErrorApp(e.message))
             dispatch(setAppStatusAC('succeeded'))
+            console.log(e.message)
         }
     }
 }
@@ -199,6 +203,7 @@ export const fetchLocationPageTC = (id) => {
         } catch (e) {
             dispatch(setAppStatusAC('succeeded'))
             dispatch(setErrorApp(e.message))
+            console.log(e.message)
         }
     }
 }
@@ -220,6 +225,7 @@ export const fetchCharacterPageTC = (id) => {
         } catch (e) {
             dispatch(setAppStatusAC('succeeded'))
             dispatch(setErrorApp(e.message))
+            console.log(e.message)
         }
     }
 }

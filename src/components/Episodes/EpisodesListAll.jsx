@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchEpisodeTC,} from "../../bll/reducer";
 import {NavLink} from "react-router-dom";
 
-const EpisodesListAll = () => {
+const EpisodesListAll = React.memo(() => {
     const episodes = useSelector(state => state.serialData.episodes)
     const dispatch = useDispatch()
 
@@ -14,31 +14,28 @@ const EpisodesListAll = () => {
     const [element, setElement] = useState(null)
     const intersected = useScroll( element, () => loadMore())
 
-
-
     const loadMore = () => {
-        if(page.current <=3) page.current++
-        handleInitial(page.current);
+        page.current++
+        handleInitial(page.current)
     }
 
     const handleInitial = useCallback((page) => dispatch(fetchEpisodeTC(page)), [fetchEpisodeTC])
 
     useEffect(() => {
-        handleInitial(page.current);
+      if(JSON.stringify(episodes) === '{}') handleInitial(page.current)
     }, [handleInitial]);
 
     return (
         <div>
             <div  className={style.episodesBlockScroll}>
                 {
-                    episodes.map(e => <NavLink key={e.id} to={'/episode/' + e.id}>
+                   Object.values(episodes).map(e => <NavLink key={e.id} to={'/episode/' + e.id}>
                             <Episode
                                 name={e.name}
                                 episode={e.episode}
                                 airDate={e.air_date}
                                 characters={e.characters}
                             />
-
                         </NavLink>
                     )
                 }
@@ -46,7 +43,6 @@ const EpisodesListAll = () => {
             </div>
         </div>
     );
-}
-
+})
 
 export default EpisodesListAll;

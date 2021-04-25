@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {HotModuleReplacementPlugin} = require("webpack");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
     entry: path.resolve(__dirname, "src/index.jsx"),
@@ -48,6 +49,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "styles.[contentHash].css",
         }),
+        new FaviconsWebpackPlugin('src/assets/logo.png')
     ],
     devServer: {
         historyApiFallback: true,
@@ -55,4 +57,5 @@ module.exports = {
         hot: true,
         port: 3000,
     },
+    devtool: "eval-cheap-source-map",
 };

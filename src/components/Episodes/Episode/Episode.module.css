@@ -68,6 +68,16 @@
     justify-content: space-between;
 }
 
+.nothingSearch {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.rick {
+    height: 229px;
+    width: 200px;
+}
 .child {
     height: 10px;
     background: green;

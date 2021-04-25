@@ -5,20 +5,22 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSortDownAC, setSortUpAC} from "../../bll/reducer";
 import {NavLink} from "react-router-dom";
 import SuperButton from "../common/Button/SuperButton";
+import rick from "../../assets/logo.png";
 
-const SelectedEpisodesList = () => {
+const SelectedEpisodesList = React.memo(() => {
+    const selectedEpisode = useSelector(state => state.serialData.selectedEpisode)
     const searchEpisode = useSelector(state => state.serialData.searchEpisode)
-    const error = useSelector(state => state.serialData.error)
     const dispatch = useDispatch()
     const [sortToggle, setSortToggle] = useState(false)
 
-    let copyEpisodes = [...searchEpisode]
+    let copyEpisodes = [...selectedEpisode]
+    let renderEpisodesResult
 
-
-    // useEffect(() => {
-    //     dispatch(fetchSeasonTC('s1'))
-    // }, [])
-
+    if (selectedEpisode.length === 0) {
+        renderEpisodesResult = [...searchEpisode]
+    } else {
+        renderEpisodesResult = [...copyEpisodes]
+    }
 
     const sortEpisodes = () => {
         if (sortToggle) {
@@ -30,6 +32,12 @@ const SelectedEpisodesList = () => {
         }
     }
 
+    if (copyEpisodes.length === 0 && searchEpisode.length === 0) {
+        return <div className={style.nothingSearch}>Nothing was found. Please change your request
+            <img src={rick} alt="Nothing..." className={style.rick}/>
+        </div>
+    }
+
     return (
         <div>
             <div className={style.sortBtn}>
@@ -37,9 +45,8 @@ const SelectedEpisodesList = () => {
             </div>
             <div className={style.episodesBlock}>
                 {
-                    copyEpisodes && copyEpisodes.map(e => <NavLink key={e.id} to={'/episode/' + e.id}>
+                    renderEpisodesResult.map(e => <NavLink key={e.id} to={'/episode/' + e.id}>
                         <Episode
-                            key={e.id}
                             name={e.name}
                             episode={e.episode}
                             airDate={e.air_date}
@@ -49,9 +56,9 @@ const SelectedEpisodesList = () => {
                 <div className={style.child}/>
 
             </div>
-            {error && <div>Ups...Error loading data.Sorry</div>}
+
         </div>
     )
-}
+})
 
 export default SelectedEpisodesList;

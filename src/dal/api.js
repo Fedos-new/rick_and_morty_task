@@ -22,6 +22,7 @@ const handleSeasonsUrl = (s) => {
 
 export const appAPI = {
     getEpisodes(page) {
+        if(page<=3)
         return instance.get(`episode?page=${page}`)
     },
     getCharactersOnUrl(url) {

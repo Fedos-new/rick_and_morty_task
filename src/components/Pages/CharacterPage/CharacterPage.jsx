@@ -1,28 +1,13 @@
-import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchCharacterPageTC} from "../../bll/reducer";
-import {NavLink, useParams} from "react-router-dom";
-import style from '../Character/Character.module.css'
-import style2 from '../Episodes/Episode/Episode.module.css'
-import Episode from "../Episodes/Episode/Episode";
+import React from "react";
+import {NavLink} from "react-router-dom";
+import style from '../../Character/Character.module.css'
+import style2 from '../../Episodes/Episode/Episode.module.css'
+import Episode from "../../Episodes/Episode/Episode";
 
 
-const CharacterPage = () => {
-    const characterPage = useSelector(state => state.serialData.characterPage)
-    const episodes = useSelector(state => state.serialData.episodes)
-    const error = useSelector(state => state.serialData.error)
+const CharacterPage = React.memo((props) => {
 
-    const {name, status, species, type, gender, location, image,} = characterPage
-    const dispatch = useDispatch()
-    let {id} = useParams();
-
-    useEffect(() => {
-        dispatch(fetchCharacterPageTC(id))
-    }, [id])
-
-    if (error) {
-        return <div className={style.error}>Error loading data: {error}</div>
-    }
+    const {name, status, species, type, gender, location, image,episodes} = props
 
     return (
         <div className={style.wrapEpisodePage}>
@@ -46,7 +31,7 @@ const CharacterPage = () => {
                 <div className={style2.episodesBlock}>
                     {
                         episodes &&
-                        episodes.map(e => <NavLink key={e.id} to={'/episode/' + e.id}>
+                        Object.values(episodes).map(e => <NavLink key={e.id} to={'/episode/' + e.id}>
                                 <Episode
                                     key={e.id}
                                     name={e.name}
@@ -60,7 +45,7 @@ const CharacterPage = () => {
             </div>
         </div>
     )
-}
+})
 export default CharacterPage
 
 
